@@ -711,7 +711,7 @@ function decorateRoom(rm,r,st,loc,loot,barrels,zombies,fg,rg){
   const pz=.18+.1*loc.risk+.08*rm.f;
   if(rg()<pz){ const n=1+(w>300&&rg()<.25*loc.risk?1:0)+(w>420&&rg()<.15*loc.risk?1:0);
     for(let i=0;i<n;i++) zombies.push(mkZombie(pickZ(rg,loc.risk),rm.x0+50+rg()*(w-100),rm.f,(loc.risk-1)+Math.floor(rm.f/2),rg()<.35?"lie":"stand",rg)); }
-  if(r()<.6) fg.push({f:rm.f,x:rm.x0+r()*w,kind:r()<.6?pick(r,["rubble","plant","chair","crates","railing"]):pick(r,["cable","pipe","lampcord"]),seed:r()});
+  if(r()<.35) fg.push({f:rm.f,x:rm.x0+r()*w,kind:r()<.6?pick(r,["rubble","plant","chair","crates","railing"]):pick(r,["cable","pipe","lampcord"]),seed:r()});
 }
 function mkZombie(type,x,f,bonus,rest,r){ const T=TYPES[type], hp=T.hp+(bonus||0), rnd=r||Math.random; const seed=Math.floor(rnd()*1e6);
   return {type,T,x,f,hp,max:hp,state:rest?"rest":"hunt",rest:rest||null,rise:rest==="lie"?0:1,face:rnd()<.5?-1:1,atk:0,cd:0,stun:0,kv:0,walk:0,t:Math.random()*6,wake:0,dead:false,deadT:0,hitT:0,look:zLook(type,seed),speed:T.speed*(.9+Math.random()*.2),moving:false}; }
@@ -729,7 +729,7 @@ function genStreet(opt){
   for(let px=-600;px<Wd+600;px+=240+r()*120) props.push({k:"lamppost",x:px,d:.64,seed:r()});
   for(let i=0;i<5;i++) props.push({k:pick(r,["car","car","dumpster","busstop","barricade"]),x:-200+r()*(Wd+400),d:.8,col:pick(r,["#a84a3a","#3a6a8a","#d8c9a8","#5a7a4a","#7a7a82"]),seed:r()});
   props.sort((a,b)=>a.d-b.d);
-  for(let i=0;i<9;i++) fg.push({f:0,x:-300+r()*(Wd+600),kind:pick(r,["fence","bush","hydrant","sign","cone","trash"]),seed:r()});
+  for(let i=0;i<5;i++) fg.push({f:0,x:-300+r()*(Wd+600),kind:pick(r,["bush","hydrant","sign","cone","trash","fence"]),seed:r()});
   const P={x:Wd/2,f:0}, zombies=[], view=SW/K;
   opt.types.forEach((t,i)=>{ if(opt.calm&&opt.types.length===1) zombies.push(mkZombie(t,P.x+230,0,0,"stand")); else { const side=i%2?-1:1; const z=mkZombie(t,clamp(P.x+side*(view/2+40+i*45),20,Wd-20),0,0,null); z.stun=.5+i*.35; z.face=-side; zombies.push(z); } });
   return base({kind:"street",width:Wd,floors:1,rooms:[],loot:[],barrels:[],zombies,fg,facades,props,mids,player:P,cb:opt,bias:"scrap"});
@@ -1390,7 +1390,10 @@ function renderForeground(){
     const wCss=s.cv.width/scale, hCss=s.cv.height/scale, X=sx(it.x,FFG);
     if(X+wCss<0||X-wCss>SW) continue;
     const Y=s.top?sy(yC(f)-SLAB*.4,FFG):sy(yF(f)+(W.kind==="street"?60:SLAB*.7),FFG);
-    ctx.globalAlpha=.92; ctx.drawImage(s.cv,X-wCss/2,s.top?Y-s.pad/scale:Y-hCss+s.pad/scale,wCss,hCss); ctx.globalAlpha=1; }
+    // Spieler und Loot bleiben lesbar: Vordergrund davor wird durchsichtig
+    const px=sx(p.x,FA), near=Math.abs(X-px)<wCss/2+50||W.loot.some(o=>o.f===f&&!o.looted&&Math.abs(X-sx(o.x,FLOOT))<wCss/2+30);
+    it.a=lerp(it.a==null?.9:it.a,near?.28:.9,.15);
+    ctx.globalAlpha=it.a; ctx.drawImage(s.cv,X-wCss/2,s.top?Y-s.pad/scale:Y-hCss+s.pad/scale,wCss,hCss); ctx.globalAlpha=1; }
   const g=ctx.createRadialGradient(SW/2,SH/2,Math.min(SW,SH)*.35,SW/2,SH/2,Math.max(SW,SH)*.75); g.addColorStop(0,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(0,0,0,.5)"); ctx.fillStyle=g; ctx.fillRect(0,0,SW,SH);
 }
 function renderOverlay(){
