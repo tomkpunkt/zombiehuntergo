@@ -597,16 +597,16 @@ function Lf(f){ ctx.setTransform(D*K*f,0,0,D*K*f,D*(SW/2-cam.x*K*f),D*(SH*.5-cam
 function scr(){ ctx.setTransform(D,0,0,D,0,0); }
 
 const STYLE={
-  "Apotheke":    {walls:["tile","plaster"],floor:"tile",deco:["shelfBottles","counter","plant","boxes","shelfBottles"],wdeco:["poster","clock","sign","picture"],loot:["medcab","cabinet","crate"]},
-  "Supermarkt":  {walls:["plaster","tile"],floor:"tile",deco:["shelfGoods","shelfGoods","counter","cart","vending","boxes"],wdeco:["poster","sign","clock"],loot:["fridge","crate","cabinet"]},
-  "Tankstelle":  {walls:["brick","plaster"],floor:"concrete",deco:["tires","drums","toolchest","vending","boxes"],wdeco:["toolboard","poster","sign"],loot:["crate","locker","cabinet"]},
-  "Polizeiwache":{walls:["wallpaper","plaster"],floor:"wood",deco:["deskPC","filing","lockersRow","plant","chair"],wdeco:["cellbars","whiteboard","picture","clock"],loot:["locker","cabinet","safe","desk"]},
-  "Krankenhaus": {walls:["tile","plaster"],floor:"tile",deco:["hospBed","curtain","filing","plant","chair"],wdeco:["poster","clock","sign"],loot:["medcab","cabinet","corpse","locker"]},
-  "Baumarkt":    {walls:["brick","concrete"],floor:"concrete",deco:["lumber","shelfGoods","tires","boxes","drums"],wdeco:["toolboard","poster","sign"],loot:["crate","cabinet","locker"]},
-  "Schulgebäude":{walls:["wallpaper","plaster"],floor:"wood",deco:["schoolDesks","schoolDesks","lockersRow","plant","shelfBooks"],wdeco:["chalkboard","poster","clock","picture"],loot:["locker","cabinet","desk"]},
-  "Schutzbunker":{walls:["concrete","concrete"],floor:"concrete",deco:["bunk","radio","boxes","drums","lockersRow"],wdeco:["sign","poster","vent"],loot:["crate","locker","safe","corpse"]}
+  "Apotheke":    {walls:["tile","plaster"],floor:"tile",deco:["shelfBottles","counter","plant","boxes","shelfBottles","sofa","floorLamp"],wdeco:["wallShelf","poster","clock","sign","picture"],loot:["medcab","cabinet","crate"]},
+  "Supermarkt":  {walls:["plaster","tile"],floor:"tile",deco:["shelfGoods","shelfGoods","counter","cart","vending","boxes","plant","floorLamp"],wdeco:["wallShelf","poster","sign","clock"],loot:["fridge","crate","cabinet"]},
+  "Tankstelle":  {walls:["brick","plaster"],floor:"concrete",deco:["tires","drums","toolchest","vending","boxes","sofa","kitchen"],wdeco:["wallShelf","toolboard","poster","sign"],loot:["crate","locker","cabinet"]},
+  "Polizeiwache":{walls:["wallpaper","plaster"],floor:"wood",deco:["deskPC","filing","lockersRow","plant","chair","kitchen","sofa","floorLamp","shelfBooks"],wdeco:["wallShelf","cellbars","whiteboard","picture","clock"],loot:["locker","cabinet","safe","desk"]},
+  "Krankenhaus": {walls:["tile","plaster"],floor:"tile",deco:["hospBed","curtain","filing","plant","chair","sofa","floorLamp","kitchen"],wdeco:["wallShelf","poster","clock","sign"],loot:["medcab","cabinet","corpse","locker"]},
+  "Baumarkt":    {walls:["brick","concrete"],floor:"concrete",deco:["lumber","shelfGoods","tires","boxes","drums","plant","kitchen"],wdeco:["wallShelf","toolboard","poster","sign"],loot:["crate","cabinet","locker"]},
+  "Schulgebäude":{walls:["wallpaper","plaster"],floor:"wood",deco:["schoolDesks","schoolDesks","lockersRow","plant","shelfBooks","kitchen","floorLamp","sofa"],wdeco:["wallShelf","chalkboard","poster","clock","picture"],loot:["locker","cabinet","desk"]},
+  "Schutzbunker":{walls:["concrete","concrete"],floor:"concrete",deco:["bunk","radio","boxes","drums","lockersRow","kitchen","floorLamp"],wdeco:["wallShelf","sign","poster","vent"],loot:["crate","locker","safe","corpse"]}
 };
-const CELLAR={deco:["boxes","rubble","drums","shelfBooks","beam","chair","lumber","boxes"],wdeco:["vent","sign","poster"],loot:["crate","corpse","cabinet","locker"]};
+const CELLAR={deco:["boxes","rubble","drums","shelfBooks","beam","chair","lumber","boxes","floorLamp"],wdeco:["vent","sign","poster","wallShelf"],loot:["crate","corpse","cabinet","locker"]};
 const WALLCOL={brick:["#a8573d","#9a5a44","#b56a4a"],plaster:["#d8c9a8","#c9d1b8","#e0c8a8","#bfc7cf"],concrete:["#8f8a82","#9a948a","#7f7c78"],tile:["#cfe0dc","#e4e4da","#bcd6e0"],wallpaper:["#a9b88f","#c9a98f","#9fb0c9","#c4a9b8"]};
 const FLOORCOL={wood:"#8a5a34",tile:"#b9b5a8",concrete:"#6f6a62"};
 const GRAFF=["HILFE","NICHT RUNTERGEHEN","SIE HÖREN DICH","KEIN STROM","LISA → BUNKER","LEISE!","TAG 23","NICHT ÖFFNEN","WIR SIND RAUS","LAUF"];
@@ -647,6 +647,9 @@ function buildPano(){
   const hills=(base,amp,col,step)=>{ x.fillStyle=col; x.beginPath(); x.moveTo(0,h); const ph0=r()*6; for(let px=0;px<=w;px+=step){ const y=base-amp*(.5+.5*Math.sin(px/w*Math.PI*6+ph0))-amp*.35*(.5+.5*Math.sin(px/w*Math.PI*14+ph0*2)); x.lineTo(px,y); } x.lineTo(w,h); x.closePath(); x.fill(); };
   const hz={day:["#9fb3c4","#7f95a8","#4f6b5a","#2f4a3a"],dusk:["#8a6f8a","#6a587a","#3f4a4a","#26332f"],night:["#2a3150","#222844","#151d26","#0e141a"]}[ph];
   hills(h*.6,140,hz[0],20); hills(h*.66,90,hz[1],20);
+  { const tx=w*.31, base=h*.72; x.fillStyle=hz[1]; x.fillRect(tx-5,base-330,10,330); x.beginPath(); x.moveTo(tx-16,base); x.lineTo(tx-4,base-120); x.lineTo(tx+4,base-120); x.lineTo(tx+16,base); x.fill(); x.beginPath(); x.arc(tx,base-300,20,0,7); x.fill(); x.fillRect(tx-2,base-400,4,80); x.fillRect(tx-8,base-276,16,8);
+    if(ph!=="day"){ x.fillStyle="rgba(255,90,70,.9)"; x.beginPath(); x.arc(tx,base-400,3,0,7); x.fill(); }
+    x.strokeStyle=hz[1]; x.lineWidth=3; for(const cx0 of [w*.55,w*.82,w*.08]){ x.beginPath(); x.moveTo(cx0,base); x.lineTo(cx0,base-190); x.lineTo(cx0-40,base-190); x.lineTo(cx0+110,base-190); x.moveTo(cx0,base-205); x.lineTo(cx0+80,base-190); x.moveTo(cx0+90,base-190); x.lineTo(cx0+90,base-150); x.stroke(); } }
   for(let i=0;i<46;i++){ const bx=r()*w, bw=18+r()*40, bh=60+r()*200, ant=r()<.4, lights=[...Array(8)].map(()=>[r(),r(),r()<.45]);
     wrap(o=>{ x.fillStyle=hz[1]; x.fillRect(bx+o,h*.7-bh,bw,bh+40); if(ant) x.fillRect(bx+o+bw*.45,h*.7-bh-24,3,24);
       if(ph!=="day") for(const [a,b2,on] of lights) if(on){ x.fillStyle="rgba(255,214,120,.75)"; x.fillRect(bx+o+3+a*(bw-8),h*.7-bh+6+b2*(bh-12),3,3); } }); }
@@ -674,7 +677,10 @@ function genBuilding(loc){
   }
   rooms.forEach((rm,i)=>{ rm.doorL=rm.x0>0; rm.doorR=rm.x1<Wd; rm.id=i; });
   for(const rm of rooms) decorateRoom(rm,rd,st,loc,loot,barrels,zombies,fg,r);
-  return base({kind:"building",loc,P,R,floors,width:Wd,rooms,loot,barrels,zombies,fg,shaftX:LW+SWD/2,player:{x:85,f:0},bias:P.bias});
+  const npcs=[]; if(r()<.4){ const cand=rooms.filter(rm=>rm.kind==="room"&&rm.f<=1&&rm.lit); if(cand.length){ const rm=pick(r,cand), rn=rng("npc"+loc.id);
+    npcs.push({x:rm.x0+60+r()*(rm.x1-rm.x0-120),f:rm.f,t:0,face:1,look:{h:86,skin:pick(rn,["#f0c9a0","#c98a5a","#8a5a3a","#e8b890"]),shirt:pick(rn,["#6a7a4a","#8a4a5a","#4a6a8a"]),pants:pick(rn,["#3a3a4a","#5a4a3a"]),shoes:"#3a2a1e",sleeve:"long",pack:true,hair:{style:pick(rn,["cap","short","long"]),color:pick(rn,["#2a2a2a","#8a5a2a","#c9a050"])}},
+      safeHint:loot.some(c=>c.kind==="safe")}); } }
+  return base({kind:"building",loc,P,R,floors,width:Wd,rooms,loot,barrels,zombies,fg,shaftX:LW+SWD/2,player:{x:85,f:0},bias:P.bias,npcs});
 }
 function decorateRoom(rm,r,st,loc,loot,barrels,zombies,fg,rg){
   const w=rm.x1-rm.x0, y0=yC(rm.f), y1=yF(rm.f), ground=rm.f===0, s=ground?st:CELLAR;
@@ -702,8 +708,8 @@ function decorateRoom(rm,r,st,loc,loot,barrels,zombies,fg,rg){
   if(r()<.45){ const a=rm.x0+r()*w*.4, b=a+80+r()*(w*.5); rm.cables.push([a,y0+8,b,y0+8,24+r()*30]); }
   const nl=Math.max(1,Math.round(w/200)); for(let i=0;i<nl;i++) rm.lamps.push(rm.x0+w*(i+.5)/nl);
   if(rm.kind==="ent") return;
-  const nD=1+ri(r,Math.min(3,Math.floor(w/140)+1)); const used=[];
-  for(let i=0;i<nD;i++){ const k=pick(r,s.deco), x=rm.x0+55+r()*(w-110); if(used.some(u=>Math.abs(u-x)<70)) continue; used.push(x); rm.deco.push({k,x,seed:r()}); }
+  const nD=2+ri(r,Math.min(3,Math.floor(w/130)+1)); const used=[]; if(r()<.55) rm.rug={x:rm.x0+w*(.3+r()*.4),w:90+r()*80,col:pick(r,["#8a3a3a","#3a5a7a","#7a6a3a","#5a3a6a"])};
+  for(let i=0;i<nD;i++){ const k=pick(r,s.deco), x=rm.x0+55+r()*(w-110); if(used.some(u=>Math.abs(u-x)<62)) continue; used.push(x); rm.deco.push({k,x,seed:r()}); }
   // Gameplay-Objekte mit eigenem Zufall (unabhängig von Deko)
   const lootSlots=Math.max(1,Math.round(w/170)); const lx=[];
   for(let i=0;i<lootSlots;i++){ if(rg()>.72) continue; const x=rm.x0+45+(w-90)*(i+.5)/lootSlots+(rg()-.5)*30; lx.push(x); loot.push({x,f:rm.f,kind:pick(rg,s.loot),looted:false,seed:rg()}); }
@@ -970,6 +976,7 @@ function updCtx(){
     if(p.search) acts.push({id:"busy",label:`Durchsucht … ${Math.round(p.search.t/p.search.dur*100)}%`,dis:true});
     else { const c=nearLoot(); if(c) acts.push({id:"loot",label:c.kind==="safe"?"Tresor knacken":"Durchsuchen",fn:()=>startSearch(c)}); }
     if(rm&&rm.kind==="shaft"&&Math.abs(p.x-W.shaftX)<50){ if(p.f>0) acts.push({id:"up",label:"▲ Hoch",fn:()=>tryRide(-1)}); if(p.f<W.floors-1) acts.push({id:"dn",label:"▼ Runter",fn:()=>tryRide(1)}); }
+    const npc=(W.npcs||[]).find(n=>n.f===p.f&&Math.abs(n.x-p.x)<55); if(npc&&!p.search) acts.push({id:"talk",label:"Reden",fn:()=>npcTalk(npc)});
     if(rm&&rm.kind==="ent"&&p.x<rm.x0+120) acts.push({id:"exit",label:"Mit Beute raus",hz:1,fn:exitBuilding});
   }
   if(W.kind==="street"){ $("edgeL").hidden=p.x>200; $("edgeR").hidden=p.x<W.width-200; }
@@ -1066,6 +1073,8 @@ function drawRoomBox(rm){
   for(let x=rm.x0;x<=rm.x1;x+=step){ c.moveTo(sx(x,FB),by1); c.lineTo(sx(x,FF),ay1); }
   if(rm.floorMat!=="wood") for(const f of [.84,.9,.96,1.02]){ const y=sy(y1,f); c.moveTo(sx(rm.x0,f),y); c.lineTo(sx(rm.x1,f),y); }
   c.stroke();
+  if(rm.rug){ const g0=rm.rug, f0=.9, f1=1.0; poly(c,[sx(g0.x-g0.w/2,f0),sy(y1,f0),sx(g0.x+g0.w/2,f0),sy(y1,f0),sx(g0.x+g0.w/2,f1),sy(y1,f1),sx(g0.x-g0.w/2,f1),sy(y1,f1)]); inkFill(c,g0.col,1.6);
+    c.strokeStyle="rgba(246,236,210,.5)"; c.lineWidth=1.5; poly(c,[sx(g0.x-g0.w/2+8,.91),sy(y1,.91),sx(g0.x+g0.w/2-8,.91),sy(y1,.91),sx(g0.x+g0.w/2-8,.99),sy(y1,.99),sx(g0.x-g0.w/2+8,.99),sy(y1,.99)]); c.stroke(); }
   // Decke
   poly(c,[ax0,ay0,ax1,ay0,bx1,by0,bx0,by0]); c.fillStyle="#2a2420"; c.fill();
   c.strokeStyle="rgba(0,0,0,.35)"; c.beginPath(); for(let x=rm.x0+40;x<rm.x1;x+=80){ c.moveTo(sx(x,FB),by0); c.lineTo(sx(x,FF),ay0); } c.stroke();
@@ -1144,6 +1153,8 @@ function drawWallDeco(c,d,rm){
     case "chalkboard": box(c,x-50,y-30,100,60,"#2f4a3a",2,3); c.strokeStyle="rgba(255,255,255,.6)"; c.lineWidth=1.5; c.beginPath(); c.moveTo(x-38,y-14); c.lineTo(x+10,y-14); c.moveTo(x-38,y); c.lineTo(x+28,y); c.moveTo(x-38,y+12); c.lineTo(x-4,y+12); c.stroke(); box(c,x-52,y+30,104,5,"#8a5a34",1,1.6); break;
     case "whiteboard": box(c,x-44,y-26,88,52,"#f2f2ec",2,2.5); c.strokeStyle="#3a6aa0"; c.lineWidth=1.6; c.beginPath(); c.moveTo(x-30,y-10); c.lineTo(x+14,y-10); c.moveTo(x-30,y+4); c.lineTo(x+24,y+4); c.stroke(); c.strokeStyle="#d9472b"; c.beginPath(); c.arc(x+26,y-12,8,0,7); c.stroke(); break;
     case "toolboard": box(c,x-44,y-30,88,60,"#b58a5a",2); c.fillStyle="rgba(23,18,13,.35)"; for(let i=0;i<6;i++) for(let j=0;j<4;j++) c.fillRect(x-38+i*15,y-24+j*15,2,2); box(c,x-30,y-20,6,30,"#d9472b",1,1.6); box(c,x-12,y-18,22,6,"#9aa3ad",1,1.6); box(c,x+16,y-22,6,28,"#3a6aa0",1,1.6); break;
+    case "wallShelf": box(c,x-36,y+6,72,6,"#8a5a34",1,1.8); for(let i=0;i<4;i++){ const k2=r(); if(k2<.35){ box(c,x-30+i*17,y-8,10,14,"#b5603a",2,1.4); c.fillStyle="#4f8a3a"; c.beginPath(); c.ellipse(x-25+i*17,y-14,8,6,0,0,7); c.fill(); }
+      else if(k2<.7) box(c,x-30+i*17,y-12,9,18,pick(r,["#e8e4d8","#3a6aa0","#d9472b"]),2,1.4); else box(c,x-30+i*17,y-6,12,12,pick(r,["#c89a5a","#9aa3ad"]),2,1.4); } break;
     case "cellbars": c.strokeStyle="#4a4f55"; c.lineWidth=5; c.beginPath(); for(let i=-40;i<=40;i+=14){ c.moveTo(x+i,y-60); c.lineTo(x+i,yF(rm.f)-10); } c.stroke(); box(c,x-46,y-64,92,8,"#4a4f55",1,1.6); break;
   }
 }
@@ -1181,6 +1192,14 @@ function drawDeco(c,d,y){
     case "toolchest": sbox(c,x-28,y-70,56,70,"#c0392b"); for(let i=0;i<5;i++){ c.fillStyle=INK; c.fillRect(x-28,y-70+i*14+13,56,1.6); box(c,x-8,y-70+i*14+5,16,3,"#cfd4d8",1,1); } break;
     case "lumber": for(let i=0;i<5;i++) box(c,x-60+(i%2)*6,y-10-i*9,120,9,shade("#c89a5a",.85+i*.04),1,1.6); break;
     case "bunk": box(c,x-48,y-110,6,110,"#6a7a5a",1); box(c,x+42,y-110,6,110,"#6a7a5a",1); box(c,x-46,y-34,92,10,"#7a8a6a",3); box(c,x-46,y-92,92,10,"#7a8a6a",3); box(c,x-42,y-44,24,10,PAPER,4); box(c,x-42,y-102,24,10,PAPER,4); break;
+    case "sofa":{ const col=pick(r,["#8a4a3a","#4a6a5a","#5a5a8a","#9a6a3a"]); box(c,x-52,y-58,104,30,col,8); box(c,x-56,y-34,112,24,shade(col,.88),6); box(c,x-62,y-46,16,36,shade(col,.75),6); box(c,x+46,y-46,16,36,shade(col,.75),6);
+      box(c,x-40,y-50,22,14,PAPER,5,1.6); box(c,x+16,y-50,22,14,pick(r,["#f7b32b","#6fae5a","#d9a8a8"]),5,1.6); break; }
+    case "floorLamp": c.strokeStyle=INK; c.lineWidth=5; c.beginPath(); c.moveTo(x,y-4); c.lineTo(x,y-120); c.stroke(); c.strokeStyle="#5a4a3a"; c.lineWidth=2.4; c.stroke(); box(c,x-12,y-6,24,6,"#5a4a3a",2,1.8);
+      poly(c,[x-18,y-118,x+18,y-118,x+12,y-142,x-12,y-142]); inkFill(c,"#f2d08a",2); c.fillStyle="rgba(255,240,180,.55)"; c.beginPath(); c.ellipse(x,y-118,16,3,0,0,7); c.fill(); break;
+    case "kitchen":{ sbox(c,x-58,y-52,116,52,"#a8744a"); box(c,x-62,y-58,124,8,"#d8d0c0",2); c.fillStyle=INK; c.fillRect(x-20,y-50,2,48); c.fillRect(x+18,y-50,2,48);
+      box(c,x-52,y-130,104,36,"#c08a5a",2); c.fillStyle=INK; c.fillRect(x-1,y-128,2,32); box(c,x-30,y-72,18,14,"#9aa3ad",2,1.6); c.strokeStyle=INK; c.lineWidth=2; c.beginPath(); c.moveTo(x-21,y-72); c.quadraticCurveTo(x-21,y-84,x-12,y-84); c.stroke();
+      box(c,x+22,y-74,24,16,"#4a5058",3,1.6); c.fillStyle="#d9472b"; c.beginPath(); c.arc(x+28,y-66,2.4,0,7); c.arc(x+40,y-66,2.4,0,7); c.fill();
+      for(let i=0;i<3;i++) box(c,x-40+i*14,y-98,8,10+r()*6,pick(r,["#e8e4d8","#d9472b","#6fae5a","#3a6aa0"]),2,1.4); break; }
     case "radio": box(c,x-40,y-46,80,8,"#6a5a4a",2); box(c,x-36,y-38,6,38,"#5a4a3a",1); box(c,x+30,y-38,6,38,"#5a4a3a",1); box(c,x-30,y-80,56,34,"#4a5a4a",3); c.beginPath(); c.arc(x-16,y-63,8,0,7); inkFill(c,"#2a2a2a",1.6); c.fillStyle=Math.sin(W.t*4)>0?"#6fae5a":"#2a3a2a"; c.fillRect(x+2,y-74,6,4); c.fillStyle=Math.sin(W.t*3+1)>0?"#d9472b":"#3a2a2a"; c.fillRect(x+12,y-74,6,4); c.strokeStyle=INK; c.lineWidth=2; c.beginPath(); c.moveTo(x+20,y-80); c.lineTo(x+30,y-112); c.stroke(); break;
   }
 }
@@ -1228,10 +1247,15 @@ function playerPose(){
 }
 function renderAction(){
   const c=ctx, p=W.p, vis=f=>Math.abs(f-p.f)<=1;
-  Lf(FLOOT); for(const o of W.loot) if(vis(o.f)) drawLoot(c,o);
+  Lf(FLOOT); for(const o of W.loot) if(vis(o.f)){ c.fillStyle="rgba(10,6,4,.3)"; c.beginPath(); c.ellipse(o.x,yF(o.f)-1,o.kind==="corpse"?50:30,6,0,0,7); c.fill(); drawLoot(c,o); }
   Lf(FA);
   for(const b of W.barrels){ if(!b.alive||!vis(b.f)) continue; const x=b.x, y=yF(b.f); box(c,x-15,y-42,30,42,"#d9472b",6); c.fillStyle=INK; c.fillRect(x-15,y-30,30,2.4); c.fillRect(x-15,y-13,30,2.4); poly(c,[x,y-28,x+8,y-16,x-8,y-16]); inkFill(c,"#f7b32b",1.5); }
   for(const d of W.drops){ if(!vis(d.f)) continue; const y=yF(d.f)-6-Math.abs(Math.sin(W.t*4+d.x))*4; box(c,d.x-8,y-8,16,10,d.kind==="ammo"?"#f7b32b":"#9aa3ad",2,1.6); }
+  const shadow=(x,f,w,a)=>{ c.fillStyle=`rgba(10,6,4,${a})`; c.beginPath(); c.ellipse(x,yF(f)-1,w,w*.18,0,0,7); c.fill(); };
+  for(const b of W.barrels) if(b.alive&&vis(b.f)) shadow(b.x,b.f,20,.35);
+  for(const z of W.zombies){ if(!vis(z.f)||(z.dead&&z.deadT>4)) continue; const flat=z.dead||(z.rest==="lie"&&z.state==="rest"); shadow(z.x-(flat?z.face*z.look.h*.45:0),z.f,flat?z.look.h*.55:26*z.T.bulk,.38); }
+  if(!(p.ride&&p.ride.t/p.ride.dur>.3&&p.ride.t/p.ride.dur<.7)) shadow(p.x,p.f,26,.42);
+  for(const n of W.npcs||[]) if(vis(n.f)){ shadow(n.x,n.f,24,.38); drawNPC(c,n); }
   const sorted=W.zombies.filter(z=>vis(z.f)).sort((a,b)=>(b.dead?1:0)-(a.dead?1:0));
   for(const z of sorted) drawZombie(c,z);
   drawPlayer(c);
@@ -1251,6 +1275,26 @@ function drawZombie(c,z){
   drawPerson(c,z.x,yF(z.f),o);
   if(!z.dead&&z.state==="rest"){ c.font=`22px "Lilita One", sans-serif`; c.textAlign="center"; const a=(z.t*.7)%1; c.globalAlpha=1-a; c.lineWidth=3.5; c.strokeStyle=INK; const ty=yF(z.f)-(z.rest==="lie"?30:z.look.h+6)-a*18; c.strokeText("z",z.x+z.face*16,ty); c.fillStyle=PAPER; c.fillText("z",z.x+z.face*16,ty); c.globalAlpha=1; }
   if(!z.dead&&z.hp<z.max&&z.state!=="rest"){ const n=z.max, w=Math.min(7,48/n), yy=yF(z.f)-z.look.h-14; for(let i=0;i<n;i++){ rr(c,z.x-n*(w+2)/2+i*(w+2),yy,w,6,2); inkFill(c,i<z.hp?"#d9472b":"#d8c9a4",1.4); } }
+}
+function drawNPC(c,n){
+  const p=W.p; n.face=p.f===n.f?(p.x<n.x?-1:1):n.face;
+  drawPerson(c,n.x,yF(n.f),Object.assign({},n.look,{face:n.face,t:W.t,armF:{a1:.5,a2:.9},armB:{a1:.1,a2:.3}}));
+  const by=yF(n.f)-n.look.h-28-Math.sin(W.t*2.5)*3; rr(c,n.x-18,by-14,36,24,10); inkFill(c,PAPER,2.2); poly(c,[n.x-4,by+9,n.x+4,by+9,n.x-6,by+18]); inkFill(c,PAPER,2);
+  c.fillStyle=PAPER; c.fillRect(n.x-5,by+6,10,4); c.fillStyle=INK; for(let i=-1;i<=1;i++){ c.beginPath(); c.arc(n.x+i*8,by-2,2.4,0,7); c.fill(); }
+}
+const NPC_LINES=["Pssst! Nicht so laut, die da unten schlafen.","Ich tausche. Keine Fragen.","Im Keller ist es stockdunkel. Hast du eine Lampe?","Wenn es zu laut wird, kommen sie in Scharen.","Das Messer ist dein Freund. Leise rein, leise raus."];
+function npcTalk(n){
+  W.paused=true; const line=n.safeHint&&Math.random()<.6?"Weiter unten steht ein Tresor. Ich krieg ihn nicht auf – du vielleicht.":pick(Math.random,NPC_LINES);
+  const done=()=>{ $("event").hidden=true; if(W){ W.paused=false; wlast=performance.now(); joyReset(); W.ctxSig=""; } hud(); };
+  $("evTitle").textContent="Überlebende*r"; $("evText").textContent=`„${line}“`;
+  const box=$("evChoices"); box.innerHTML="";
+  const opts=[
+    {label:"6 Schrott → 8 Patronen",ok:S.scrap>=6,fn:()=>{ S.scrap-=6; S.ammo+=8; toast("Getauscht: +8 Patronen"); }},
+    {label:"3 Teile → 1 Granate",ok:S.parts>=3,fn:()=>{ S.parts-=3; S.grenades++; toast("Getauscht: +1 Granate"); }},
+    {label:"12 Schrott → 1 Verband",ok:S.scrap>=12,fn:()=>{ S.scrap-=12; S.meds++; toast("Getauscht: +1 Verband"); }},
+    {label:"Tschüss",ok:true,fn:()=>{}}];
+  for(const o of opts){ const b=document.createElement("button"); b.className="btn"+(o.label==="Tschüss"?"":" hz"); b.textContent=o.label; b.disabled=!o.ok; b.onclick=()=>{ o.fn(); save(); updHands(); done(); }; box.appendChild(b); }
+  $("event").hidden=false; $("event").style.zIndex=1150;
 }
 function drawPlayer(c){
   const p=W.p;
@@ -1325,6 +1369,14 @@ function renderStreetFront(){
 }
 
 // ---------- Licht & Dunkelheit ----------
+function lampSpots(rm){ const out=[]; if(!rm.lit||rm._litNow===false) return out; for(const l of rm.lamps) out.push([sx(l,FDEC),sy(yC(rm.f)+50,FDEC),1]); for(const d of rm.deco) if(d.k==="floorLamp") out.push([sx(d.x,FDEC),sy(yF(rm.f)-128,FDEC),.7]); return out; }
+function warmLight(){
+  if(W.kind!=="building") return; const p=W.p; scr(); ctx.globalCompositeOperation="lighter";
+  for(const rm of W.rooms){ if(rm.f!==p.f||!rm.explored) continue;
+    for(const [x,y,s] of lampSpots(rm)){ const r=RH*K*.75*s; const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,"rgba(255,170,70,.28)"); g.addColorStop(1,"rgba(255,170,70,0)"); ctx.fillStyle=g; ctx.fillRect(x-r,y-r,r*2,r*2); }
+    if(PANO_KEY!=="day") for(const wd of rm.windows){ const x=sx((wd.x0+wd.x1)/2,FB), y=sy((wd.y0+wd.y1)/2,FB), r=70*K; const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,"rgba(120,110,200,.18)"); g.addColorStop(1,"rgba(120,110,200,0)"); ctx.fillStyle=g; ctx.fillRect(x-r,y-r,r*2,r*2); } }
+  ctx.globalCompositeOperation="source-over";
+}
 function renderLight(){
   const p=W.p, night=PANO_KEY==="night";
   if(W.kind==="street"&&!night) return;
@@ -1338,7 +1390,7 @@ function renderLight(){
   const glow=(x,y,r,a)=>{ const g=lx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,`rgba(0,0,0,${a})`); g.addColorStop(1,"rgba(0,0,0,0)"); lx.fillStyle=g; lx.fillRect(x-r,y-r,r*2,r*2); };
   if(W.kind==="building"){
     for(const rm of W.rooms){ if(rm.f!==p.f||!rm.explored) continue;
-      if(rm.lit&&rm._litNow!==false) for(const l of rm.lamps) glow(sx(l,FDEC),sy(yC(rm.f)+50,FDEC),RH*K*.95,.85);
+      for(const [x,y,s] of lampSpots(rm)) glow(x,y,RH*K*.95*s,.85);
       if(PANO_KEY!=="night") for(const wd of rm.windows){ const x0=sx(wd.x0,FB), x1=sx(wd.x1,FB), yb=sy(wd.y1,FB), yf=sy(yF(rm.f),FF); const g=lx.createLinearGradient(0,yb,0,yf); g.addColorStop(0,"rgba(0,0,0,.6)"); g.addColorStop(1,"rgba(0,0,0,0)"); lx.fillStyle=g; poly(lx,[x0,sy(wd.y0,FB),x1,sy(wd.y0,FB),x1+(x1-x0)*.9,yf,x0+(x1-x0)*.6,yf]); lx.fill(); } }
   } else for(const pr of W.props){ if(pr.k!=="lamppost") continue; const x=sx(pr.x+36,pr.d), y0=sy(yF(0)-222,pr.d), y1=sy(yF(0),1.05); const g=lx.createLinearGradient(0,y0,0,y1); g.addColorStop(0,"rgba(0,0,0,.95)"); g.addColorStop(1,"rgba(0,0,0,.25)"); lx.fillStyle=g; poly(lx,[x-8,y0,x+8,y0,x+130,y1,x-130,y1]); lx.fill(); glow(x,y0,60,.9); }
   glow(sx(p.x,FA),sy(yF(p.f)-50,FA),70*K,.45);
@@ -1349,6 +1401,7 @@ function renderLight(){
   for(const b of W.booms) glow(sx(b.x,FA),sy(b.y,FA),260*K*(1-b.t/b.dur*.5),1-b.t/b.dur);
   for(const z of W.zombies) if(!z.dead&&z.T.glow&&z.f===p.f) glow(sx(z.x,FA),sy(yF(z.f)-50,FA),90*K,.6);
   ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(lc,0,0);
+  warmLight();
   // Leuchtende Augen im Dunkeln
   Lf(FA);
   for(const z of W.zombies){ if(z.dead||z.state==="rest"||z.f!==p.f||z.rise<1) continue;
