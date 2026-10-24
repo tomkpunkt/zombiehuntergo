@@ -10,8 +10,9 @@ GPS-Zombiespiel für den Handy-Browser. Lootorte erscheinen in deiner echten Umg
 ## Spielprinzip
 
 - **Lootorte** mit drei Risikostufen: mehr Risiko = mehr Etagen, bessere Beute, härtere Zombies, schneller zu laut.
-- **Gebäude**: Tippen zum Laufen, Aufzug zwischen den Etagen, funkelnde Möbel durchsuchen, rote Fässer sprengen, Granaten werfen. Lärm lockt eine Horde an. Beute gibt es nur, wenn du lebend durch den Eingang rauskommst.
-- **Kampf**: Berührt dich ein Zombie, geht es in die Ego-Ansicht. Kopftreffer zählen doppelt.
+- **Gebäude & Straßen** als 2D-Seitenansicht mit 5 Parallax-Ebenen (Außenwelt, Wand, Möbel, Action, unscharfer Vordergrund), Licht und Dunkelheit, prozedural pro Ort.
+- **Steuerung**: virtueller Joystick (halb gedrückt = schleichen, hoch/runter im Aufzug), Buttons für linke und rechte Hand (beidhändige Waffen verschmelzen zu einem Button), Inventar oben rechts. Am PC: A/D, J/K, W/S, E, I.
+- **Kampf direkt in der Szene**: Pistole, Messer (lautlose Kills an schlafenden Zombies), Taschenlampe, Granaten, Nagelschläger und Schrotflinte (beidhändig). Lärm lockt eine Horde an. Beute gibt es nur, wenn du lebend durch den Eingang rauskommst.
 - **Events unterwegs** (alle 80–200 m): Verstecke, Überfälle, Händler, Autos, Fallen.
 - **Werkbank**: Schrott und Teile zu Patronen, Granaten und Verbänden verarbeiten.
 
